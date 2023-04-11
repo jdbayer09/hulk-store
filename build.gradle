@@ -26,11 +26,20 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.mapstruct:mapstruct:1.5.2.Final"
+	annotationProcessor "org.mapstruct:mapstruct-processor:1.5.2.Final"
+
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5', 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation "org.mockito:mockito-core"
-	testImplementation "com.tngtech.archunit:archunit-junit5:0.23.1"
+	testImplementation "org.junit.jupiter:junit-jupiter-api"
+	testImplementation "org.junit.jupiter:junit-jupiter-engine"
+	testRuntimeOnly "org.junit.jupiter:junit-jupiter-params"
 
 	testRuntimeOnly 'com.h2database:h2'
 }
