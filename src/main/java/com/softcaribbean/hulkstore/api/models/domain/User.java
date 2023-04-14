@@ -24,13 +24,10 @@ import java.util.List;
 @AllArgsConstructor
 public class User implements Serializable, UserDetails {
 
-    @NonNull
+
     private Long id;
 
-    @NonNull
     private ZonedDateTime createdAt;
-
-    private ZonedDateTime updatedAt;
 
     @NonNull
     private String email;
@@ -45,8 +42,6 @@ public class User implements Serializable, UserDetails {
     private String lastName;
 
     private boolean active;
-
-    private String profilePicturePath;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -37,7 +37,7 @@ public class SecurityConfiguration {
     }
 
     private static final String[] freePaths = {
-            "/user/register"
+            "/v1/user/register"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

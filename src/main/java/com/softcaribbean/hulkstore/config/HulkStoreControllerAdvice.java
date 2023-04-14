@@ -1,5 +1,6 @@
 package com.softcaribbean.hulkstore.config;
 
+import com.softcaribbean.hulkstore.api.exceptions.UserCreatedException;
 import com.softcaribbean.hulkstore.api.models.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.PRECONDITION_FAILED;
+import static org.springframework.http.HttpStatus.CONFLICT;
 
 @RestControllerAdvice
 @Slf4j
@@ -60,6 +62,12 @@ public class HulkStoreControllerAdvice {
     @ResponseStatus(PRECONDITION_FAILED)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(final IllegalArgumentException t) {
         return buildErrorResponse(t, t.getMessage(), PRECONDITION_FAILED);
+    }
+
+    @ExceptionHandler(UserCreatedException.class)
+    @ResponseStatus(CONFLICT)
+    public ResponseEntity<ErrorResponse> handleUserCreatedException(final UserCreatedException t) {
+        return buildErrorResponse(t, t.getMessage(), CONFLICT);
     }
 
     /**

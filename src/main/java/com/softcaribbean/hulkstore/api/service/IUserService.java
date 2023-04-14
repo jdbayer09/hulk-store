@@ -5,4 +5,6 @@ import com.softcaribbean.hulkstore.api.models.domain.User;
 public interface IUserService {
 
     User findByEmail(String email);
+
+    User createUser(User user);
 }
