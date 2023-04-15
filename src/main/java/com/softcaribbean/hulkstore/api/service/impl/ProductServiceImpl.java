@@ -5,10 +5,11 @@ import com.softcaribbean.hulkstore.api.models.domain.Product;
 import com.softcaribbean.hulkstore.api.models.domain.User;
 import com.softcaribbean.hulkstore.api.models.entity.ProductEntity;
 import com.softcaribbean.hulkstore.api.models.entity.ProductStockEntity;
-import com.softcaribbean.hulkstore.api.models.entity.UserEntity;
 import com.softcaribbean.hulkstore.api.models.mapper.product.ProductEntityDomainMapper;
 import com.softcaribbean.hulkstore.api.models.mapper.user.UserEntityDomainMapper;
+import com.softcaribbean.hulkstore.api.models.request.product.AddStockProduct;
 import com.softcaribbean.hulkstore.api.models.request.product.CreateProductRequest;
+import com.softcaribbean.hulkstore.api.models.request.product.RemoveStockProduct;
 import com.softcaribbean.hulkstore.api.repository.IProductRepository;
 import com.softcaribbean.hulkstore.api.repository.IProductStockRepository;
 import com.softcaribbean.hulkstore.api.service.IProductService;
@@ -64,5 +65,48 @@ public class ProductServiceImpl implements IProductService {
 
         productResp.getTransactions().add(productStockRepository.save(productTransaction));
         return productEntityDomainMapper.productEntityToProduct(productResp);
+    }
+
+    @Override
+    @Transactional
+    public Product addProductStock(AddStockProduct addStockProduct, User user, Long productId) {
+        return addNewTransaction(addStockProduct.quantity(), user, productId, false);
+    }
+
+    @Override
+    @Transactional
+    public Product removeProductStock(RemoveStockProduct removeStockProduct, User user, Long productId) {
+        return addNewTransaction(removeStockProduct.quantity(), user, productId, true);
+    }
+
+    private Product addNewTransaction(int quantity, User user, Long productId, boolean isRemove) {
+        var product = productRepository.findById(productId).orElseThrow(() -> new NotProductException(productId, "No existe el producto"));
+        var productTransaction = new ProductStockEntity();
+        productTransaction.setProduct(product);
+        productTransaction.setUser(userEntityDomainMapper.userToUserEntity(user));
+        if (quantity <= 0) {
+            throw  new NotProductException(productId, "La cantidad no puede ser menor o igual a 0. ");
+        } else {
+            if (isRemove) {
+                productTransaction.setQuantity(quantity * -1);
+            } else {
+                productTransaction.setQuantity(quantity);
+            }
+        }
+
+        if (isRemove) {
+            var quantityRemove = product.getTotalPieces() + (quantity * -1);
+            if (quantityRemove < 0) {
+                throw  new NotProductException(quantityRemove, "No se puede solicitar mas productos de los que hay en inventario: " + product.getTotalPieces());
+            }
+        }
+        productStockRepository.save(productTransaction);
+        if (isRemove) {
+            product.setTotalPieces(product.getTotalPieces() + (quantity * -1));
+        } else {
+            product.setTotalPieces(product.getTotalPieces() + quantity);
+        }
+        product = productRepository.save(product);
+        return productEntityDomainMapper.productEntityToProduct(product);
     }
 }

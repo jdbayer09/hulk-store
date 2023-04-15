@@ -2,7 +2,9 @@ package com.softcaribbean.hulkstore.api.controllers;
 
 import com.softcaribbean.hulkstore.api.models.domain.User;
 import com.softcaribbean.hulkstore.api.models.mapper.product.ProductDomainResponseMapper;
+import com.softcaribbean.hulkstore.api.models.request.product.AddStockProduct;
 import com.softcaribbean.hulkstore.api.models.request.product.CreateProductRequest;
+import com.softcaribbean.hulkstore.api.models.request.product.RemoveStockProduct;
 import com.softcaribbean.hulkstore.api.models.response.product.ProductResponse;
 import com.softcaribbean.hulkstore.api.service.IProductService;
 import com.softcaribbean.hulkstore.api.service.IUserService;
@@ -58,13 +60,23 @@ public class ProductController {
 
     @PutMapping("/add_stock/{idProduct}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> addStock(@PathVariable Long idProduct) {
-        return null;
+    public ResponseEntity<ProductResponse> addStock(
+            Authentication authentication,
+            @PathVariable Long idProduct,
+            @RequestBody AddStockProduct addStockProduct) {
+        User user = userService.findByEmail(authentication.getPrincipal().toString());
+        var resp = productService.addProductStock(addStockProduct, user, idProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productDomainResponseMapper.productToProductResponse(resp));
     }
 
     @PutMapping("/remove_stock/{idProduct}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> removeStock(@PathVariable Long idProduct) {
-        return null;
+    public ResponseEntity<ProductResponse> removeStock(
+            Authentication authentication,
+            @PathVariable Long idProduct,
+            @RequestBody RemoveStockProduct removeStockProduct) {
+        User user = userService.findByEmail(authentication.getPrincipal().toString());
+        var resp = productService.removeProductStock(removeStockProduct, user, idProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productDomainResponseMapper.productToProductResponse(resp));
     }
 }
