@@ -14,6 +14,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
@@ -25,6 +26,9 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class UserEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6744996614495861113L;
 
     @Id
     @Column(name = "id", nullable = false, updatable = false)

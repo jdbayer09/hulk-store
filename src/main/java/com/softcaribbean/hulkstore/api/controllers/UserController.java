@@ -28,7 +28,7 @@ public class UserController {
     private final UserDomainResponseMapper userDomainResponseMapper;
 
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest user) {
         var resp = userService.createUser(userRequestDomainMapper.userRequestToUser(user));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDomainResponseMapper.userToResponse(resp));
