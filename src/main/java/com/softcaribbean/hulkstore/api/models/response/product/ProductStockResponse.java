@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 public record ProductStockResponse(
         Long id,
         UserResponse user,
-        ZonedDateTime createAt,
+        ZonedDateTime createdAt,
         int quantity
 ) {
 }

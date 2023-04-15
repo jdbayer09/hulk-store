@@ -24,6 +24,6 @@ public class ProductStock implements Serializable {
 
     private Long id;
     private User user;
-    private ZonedDateTime createAt;
+    private ZonedDateTime createdAt;
     private int quantity;
 }

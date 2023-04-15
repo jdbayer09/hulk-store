@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,8 +47,13 @@ public class ProductStockEntity implements Serializable {
     private UserEntity user;
 
     @Column(name = "create_at", nullable = false)
-    private ZonedDateTime createAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @PrePersist
+    private void prePersist() {
+        this.setCreatedAt(ZonedDateTime.now());
+    }
 }
