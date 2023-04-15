@@ -1,12 +1,13 @@
 package com.softcaribbean.hulkstore.api.models.response.user;
 
+
 import java.time.ZonedDateTime;
 
-public record CreateUserResponse(
+public record UserResponse(
         Long id,
-        String name,
-        String lastName,
+        ZonedDateTime createdAt,
         String email,
-        ZonedDateTime createdAt
+        String name,
+        String lastName
 ) {
 }

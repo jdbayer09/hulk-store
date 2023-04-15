@@ -6,5 +6,19 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface UserRequestDomainMapper {
-    User userRequestToUser(CreateUserRequest createUserRequest);
+
+    default User userRequestToUser(CreateUserRequest createUserRequest) {
+        if ( createUserRequest == null ) {
+            return null;
+        }
+
+        User.UserBuilder user = User.builder();
+
+        user.email( createUserRequest.email() );
+        user.pass( createUserRequest.pass() );
+        user.name( createUserRequest.name() );
+        user.lastName( createUserRequest.lastName() );
+
+        return user.build();
+    }
 }
